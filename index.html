@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TET Paper-2 Social Mock Test - Part 4</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f1f8e9; padding: 20px; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #388e3c, #81c784); color: white; padding: 25px; text-align: center; }
+        .timer-bar { background: #c8e6c9; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #a5d6a7; position: sticky; top: 0; z-index: 100; }
+        .quiz-body { padding: 25px; }
+        .question-card { margin-bottom: 30px; padding: 20px; border: 1px solid #eee; border-radius: 10px; background: #fff; border-left: 5px solid #388e3c; }
+        .question-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: #333; }
+        .option-item { margin-bottom: 10px; }
+        .option-item label { display: block; padding: 12px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .option-item label:hover { background: #f1f8e9; border-color: #388e3c; }
+        #submit-btn { width: 100%; padding: 15px; background: #388e3c; color: white; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
+        #result-section { display: none; padding: 30px; text-align: center; }
+        .score-circle { width: 150px; height: 150px; border-radius: 50%; background: #388e3c; color: white; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 20px auto; font-weight: bold; }
+        .review-card { padding: 20px; margin-bottom: 20px; border-radius: 10px; text-align: left; border: 1px solid #ddd; }
+        .correct-card { border-left: 5px solid #28a745; background: #f4fff6; }
+        .wrong-card { border-left: 5px solid #dc3545; background: #fff5f5; }
+        .footer { background: #333; color: white; padding: 20px; text-align: center; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>TET Paper-2: Social Studies</h1>
+        <p>Part 4: తెలంగాణ భౌగోళిక అంశాలు - అడవులు - వ్యవసాయం</p>
+    </div>
+
+    <div class="timer-bar">
+        <div id="timer" style="font-weight: bold; color: #1b5e20; font-size: 1.2rem;">Time Left: 30:00</div>
+        <div id="q-counter">ప్రశ్నలు/Questions: 30</div>
+    </div>
+
+    <div class="quiz-body" id="quiz-area">
+        <form id="quizForm">
+            <div id="questions-container"></div>
+            <button type="button" id="submit-btn" onclick="submitQuiz()">Submit Results / ఫలితాలు</button>
+        </form>
+    </div>
+
+    <div id="result-section">
+        <h2 style="color: #388e3c;">Telangana Geography Mock Test Completed!</h2>
+        <div class="score-circle" id="score-val">0%</div>
+        <p id="marks-summary" style="margin-bottom: 20px; font-size: 1.2rem;"></p>
+        <div id="review-container"></div>
+        <button onclick="location.reload()" style="padding: 10px 20px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">Restart Quiz</button>
+    </div>
+
+    <div class="footer">
+        <p><strong>Prepared by: A Muninder Raju</strong></p>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "తెలంగాణ రాష్ట్రం ఏ పీఠభూమిలో అధిక భాగం విస్తరించి ఉంది? | Most of Telangana state is located in which plateau?", options: ["మాల్వా పీఠభూమి", "ఛోటా నాగ్‌పూర్", "దక్కన్ పీఠభూమి | Deccan Plateau", "తిబెత్ పీఠభూమి"], correct: 2 },
+        { q: "తెలంగాణలో ప్రవహించే అతిపెద్ద నది ఏది? | Which is the longest river flowing through Telangana?", options: ["కృష్ణ", "గోదావరి | Godavari", "ముసి", "మంజీర"], correct: 1 },
+        { q: "తెలంగాణ రాష్ట్ర పుష్పం ఏది? | Which is the state flower of Telangana?", options: ["తామర", "గులాబీ", "తంగేడు పువ్వు | Tangedu", "మల్లెపువ్వు"], correct: 2 },
+        { q: "తెలంగాణలో అత్యధిక విస్తీర్ణంలో ఉన్న అడవులు ఏవి? | Which type of forests cover the maximum area in Telangana?", options: ["సదా హరిత అరణ్యాలు", "ఆకురాల్చే అడవులు | Deciduous Forests", "ముళ్ల పొదలు", "మడ అడవులు"], correct: 1 },
+        { q: "తెలంగాణ రాష్ట్రంలో అత్యధిక వర్షపాతం ఏ జిల్లాలలో నమోదవుతుంది? | Which districts in Telangana receive maximum rainfall?", options: ["మహబూబ్ నగర్, జోగులాంబ", "నిర్మల్, కొమురం భీమ్ అసిఫాబాద్ | Nirmal, KB Asifabad", "హైదరాబాద్, రంగారెడ్డి", "నల్గొండ, సూర్యాపేట"], correct: 1 },
+        { q: "తెలంగాణలో గల ఏకైక టైగర్ రిజర్వ్ (పులుల సంరక్షణ కేంద్రం) ఎక్కడ ఉంది? | Where is the famous tiger reserve located in Telangana?", options: ["కవ్వాల్ | Kawal", "నెహ్రూ జూ పార్క్", "మంజీర", "పాకాల"], correct: 0 },
+        { q: "గోదావరి నది తెలంగాణలోకి ఏ జిల్లా ద్వారా ప్రవేశిస్తుంది? | Through which district does River Godavari enter Telangana?", options: ["నిర్మల్", "నిజామాబాద్ | Nizamabad (Kandakurthi)", "జగిత్యాల", "భద్రాద్రి కొత్తగూడెం"], correct: 1 },
+        { q: "కృష్ణ మరియు తుంగభద్ర నదుల కలయిక ఎక్కడ జరుగుతుంది? | Where is the confluence of Krishna and Tungabhadra rivers?", options: ["కందకుర్తి", "సంగమేశ్వరం | Sangameswaram", "బాసర", "భద్రాచలం"], correct: 1 },
+        { q: "తెలంగాణ రాష్ట్ర వృక్షం ఏది? | Which is the state tree of Telangana?", options: ["వేప", "రావి", "జమ్మి చెట్టు | Jammi Chettu", "మర్రి చెట్టు"], correct: 2 },
+        { q: "తెలంగాణలో పత్తి (Cotton) పండించడానికి అత్యంత అనువైన నేలలు? | Most suitable soils for cotton cultivation in Telangana?", options: ["ఎర్ర నేలలు", "నల్ల రేగడి నేలలు | Black Soils", "లాటరైట్ నేలలు", "చల్కా నేలలు"], correct: 1 },
+        { q: "తెలంగాణలో 'చెరువుల గొలుసు' పునరుద్ధరణ కోసం చేపట్టిన పథకం? | Scheme launched for restoration of chain of tanks in Telangana?", options: ["మిషన్ భగీరథ", "మిషన్ కాకతీయ | Mission Kakatiya", "రైతు బంధు", "హరిత హారం"], correct: 1 },
+        { q: "నాగార్జున సాగర్ ఆనకట్ట ఏ నదిపై నిర్మించబడింది? | Nagarjuna Sagar dam is built across which river?", options: ["గోదావరి", "మంజీర", "కృష్ణ | Krishna", "మూసి"], correct: 2 },
+        { q: "తెలంగాణ రాష్ట్ర పక్షి ఏది? | Which is the state bird of Telangana?", options: ["నెమలి", "పాలపిట్ట | Indian Roller", "రామచిలుక", "కోకిల"], correct: 1 },
+        { q: "తెలంగాణలో 'పోడు' (Podu) వ్యవసాయం ప్రధానంగా ఎవరు చేస్తారు? | Who primarily practices 'Podu' cultivation in Telangana?", options: ["మైదాన ప్రాంత రైతులు", "గిరిజనులు | Tribals", "పారిశ్రామికవేత్తలు", "మున్సిపల్ కార్మికులు"], correct: 1 },
+        { q: "తెలంగాణలో విస్తీర్ణ పరంగా అతిపెద్ద జిల్లా ఏది? | Which is the largest district in Telangana by area?", options: ["హైదరాబాద్", "భద్రాద్రి కొత్తగూడెం | Bhadradri Kothagudem", "నల్గొండ", "మహబూబ్ నగర్"], correct: 1 },
+        { q: "తెలంగాణలో అత్యధికంగా లభించే ఖనిజం ఏది? | Most abundant mineral found in Telangana?", options: ["బంగారం", "బొగ్గు | Coal", "ఇనుము", "రాగి"], correct: 1 },
+        { q: "సింగరేణి కాలరీస్ ప్రధాన కార్యాలయం ఎక్కడ ఉంది? | Where is the headquarters of Singareni Collieries located?", options: ["హైదరాబాద్", "ఖమ్మం", "కొత్తగూడెం | Kothagudem", "కరీంనగర్"], correct: 2 },
+        { q: "శ్రీరామ్ సాగర్ ప్రాజెక్ట్ (SRSP) ఏ జిల్లాలో ఉంది? | Sriram Sagar Project is located in which district?", options: ["నిర్మల్", "నిజామాబాద్ | Nizamabad", "ఆదిలాబాద్", "వరంగల్"], correct: 1 },
+        { q: "తెలంగాణ రాష్ట్ర జంతువు ఏది? | Which is the state animal of Telangana?", options: ["పులి", "జింక | Spotted Deer", "ఏనుగు", "సింహం"], correct: 1 },
+        { q: "తెలంగాణలో తక్కువ వర్షపాతం నమోదయ్యే ప్రాంతం? | Region receiving least rainfall in Telangana?", options: ["ఉత్తర తెలంగాణ", "దక్షిణ తెలంగాణ (మహబూబ్ నగర్ ప్రాంతం)", "తూర్పు తెలంగాణ", "పశ్చిమ తెలంగాణ"], correct: 1 },
+        { q: "రామప్ప చెరువు ఏ జిల్లాలో ఉంది? | Ramappa Lake is located in which district?", options: ["వరంగల్", "ములుగు | Mulugu", "జయశంకర్ భూపాలపల్లి", "హన్మకొండ"], correct: 1 },
+        { q: "తెలంగాణలో అడవుల శాతం సుమారుగా ఎంత ఉండాలి? (జాతీయ అటవీ విధానం ప్రకారం) | Target forest cover percentage as per policy?", options: ["20%", "24%", "33%", "50%"], correct: 2 },
+        { q: "తెలంగాణలో పండించే ప్రధాన వాణిజ్య పంట ఏది? | Main commercial crop grown in Telangana?", options: ["వరి", "పత్తి | Cotton", "జొన్న", "మొక్కజొన్న"], correct: 1 },
+        { q: "తెలంగాణ సరిహద్దులో గల రాష్ట్రాల సంఖ్య ఎంత? | How many states share a border with Telangana?", options: ["4", "5", "6", "3"], correct: 1 },
+        { q: "తెలంగాణలో ఏ జిల్లాలో అడవుల విస్తీర్ణం అత్యధికంగా ఉంది? | Which district has the highest forest cover area in Telangana?", options: ["ఆదిలాబాద్", "భద్రాద్రి కొత్తగూడెం", "ములుగు | Mulugu", "నిర్మల్"], correct: 2 },
+        { q: "కృష్ణానది తెలంగాణలో ఏ జిల్లా ద్వారా ప్రవేశిస్తుంది? | Through which district does River Krishna enter Telangana?", options: ["నల్గొండ", "మహబూబ్ నగర్ (మక్తల్) | Mahabubnagar", "జోగులాంబ గద్వాల", "వనపర్తి"], correct: 1 },
+        { q: "ప్రాణహిత నది ఏ రెండు నదుల కలయిక? | Pranahita river is the confluence of which two rivers?", options: ["గోదావరి, కృష్ణ", "పెన్ గంగా, వైన్ గంగా | Penganga & Wainganga", "మంజీర, మూసి", "తుంగ, భద్ర"], correct: 1 },
+        { q: "తెలంగాణలో ఏ రకమైన శీతోష్ణస్థితి ఉంటుంది? | What type of climate is prevalent in Telangana?", options: ["ఉష్ణమండల పొడి శీతోష్ణస్థితి | Tropical Dry Climate", "శీతల శీతోష్ణస్థితి", "మధ్యధరా శీతోష్ణస్థితి", "ఏదీ కాదు"], correct: 0 },
+        { q: "తెలంగాణలోని ఎత్తైన శిఖరం ఏది? | Which is the highest peak in Telangana?", options: ["అనంతగిరి కొండలు", "లక్ష్మీదేవిపల్లి", "దొలి గుట్ట | Doli Gutta", "రాఖీ కొండలు"], correct: 2 },
+        { q: "తెలంగాణలో పసుపు ఉత్పత్తికి ప్రసిద్ధి చెందిన జిల్లా? | District famous for Turmeric production in Telangana?", options: ["నిజామాబాద్ | Nizamabad", "ఖమ్మం", "మెదక్", "నల్గొండ"], correct: 0 }
+    ];
+
+    function renderQuestions() {
+        const container = document.getElementById('questions-container');
+        questions.forEach((q, index) => {
+            let optionsHtml = q.options.map((opt, i) => `
+                <div class="option-item">
+                    <label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>
+                </div>
+            `).join('');
+            container.innerHTML += `<div class="question-card"><div class="question-text">${index + 1}. ${q.q}</div>${optionsHtml}</div>`;
+        });
+    }
+
+    function submitQuiz() {
+        let score = 0;
+        let reviewHtml = "";
+        questions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            const userAns = selected ? parseInt(selected.value) : -1;
+            const isCorrect = userAns === q.correct;
+            if (isCorrect) score++;
+            reviewHtml += `<div class="review-card ${isCorrect ? 'correct-card' : 'wrong-card'}">
+                <p><strong>Q ${index + 1}:</strong> ${q.q}</p>
+                <p>మీ సమాధానం: ${userAns === -1 ? 'గుర్తించలేదు' : q.options[userAns]}</p>
+                ${!isCorrect ? `<p style="color:green; font-weight:bold;">సరైన సమాధానం: ${q.options[q.correct]}</p>` : ''}
+            </div>`;
+        });
+        document.getElementById('quiz-area').style.display = 'none';
+        document.getElementById('result-section').style.display = 'block';
+        document.getElementById('score-val').innerText = `${((score/30)*100).toFixed(1)}%`;
+        document.getElementById('marks-summary').innerText = `మీరు 30 కి ${score} మార్కులు సాధించారు.`;
+        document.getElementById('review-container').innerHTML = reviewHtml;
+        window.scrollTo(0,0);
+    }
+
+    window.onload = renderQuestions;
+</script>
+</body>
+</html>
